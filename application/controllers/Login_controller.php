@@ -20,6 +20,29 @@ class Login_controller extends CI_Controller {
 	 */
 	public function index()
 	{
-		$this->load->view('login');
+		$this->load->view('auth/login');
+	}
+
+	public function login()
+	{
+		$user = $this->input->post('username');
+		$pass = $this->input->post('password');
+
+		$this->load->model('User');
+
+		$dtUser = $this->User->getSelected($user)->result_array();
+
+		if(count($dtUser) > 0)
+		{
+			echo "password = ".$pass."<br>";
+
+			$encpass = sha1($pass);
+			echo "encrypted password = ".$encpass."<br>";
+			echo "db password = ".$dtUser[0]."<br>";
+
+			if($encpass == $dtUser[0]['password']) echo "login berhasil";
+			else echo "password salah";
+		}
+		else echo "usernamme salah!";
 	}
 }
